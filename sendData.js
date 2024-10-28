@@ -5,7 +5,7 @@ const data = {
 
 // Function to send data to the backend
 function sendData() {
-  fetch('https://<your-render-backend-url>/submit', { // Replace with your Render backend URL
+  fetch('https://territorial-custom-lobbies-backend.onrender.com/submit', { // Replace with your Render backend URL
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
