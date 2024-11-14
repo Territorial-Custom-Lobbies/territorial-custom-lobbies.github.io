@@ -355,7 +355,7 @@ function createSettingsUI() {
 
         if (key === 'mapID') {
           if (value === 22) {
-            lobby.settings['randomMapID'] = randomMap[getRandomInt(0, randomMap.length)];
+            lobby.settings['randomMapID'] = randomMap[Math.floor(Math.random() * randomMap.length)];
           } else if (value === 23) {
             lobby.settings['randomMapID'] = getRandomElementWithProbabilities(randomMapCompetitive, probabilitiesCompetitive);
           }
