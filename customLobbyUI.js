@@ -518,4 +518,5 @@ function checkRandomMap() {
   } else if (lobby.settings.mapID === 24) {
     lobby.settings.randomMapID = getRandomElementWithProbabilities(randomMapCompSmall, probabilitiesCompSmall);
   }
+  updateSettings(lobby.settings);
 }
