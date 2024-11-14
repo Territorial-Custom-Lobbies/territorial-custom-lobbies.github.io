@@ -260,7 +260,7 @@
   user-select: none;
   color: rgba(210, 210, 210, 1);
   background-color: rgba(120, 10, 10, 1);
-  min-width: 3em;
+  min-width: 3.4em;
   border: none;
   border-radius: 1em;
   padding: 0.1875em 0.625em;
@@ -289,7 +289,7 @@
 
 .host {
   background-color: rgba(10, 120, 180, 1);
-  min-width: 3em;
+  min-width: 3.4em;
 }
 
 .in-game {
