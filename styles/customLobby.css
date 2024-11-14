@@ -260,11 +260,11 @@
   user-select: none;
   color: rgba(210, 210, 210, 1);
   background-color: rgba(120, 10, 10, 1);
-  min-width: 3rem;
+  min-width: 3em;
   border: none;
-  border-radius: 1rem;
-  padding: 0.1875rem 0.625rem;
-  margin-right: 0.5rem;
+  border-radius: 1em;
+  padding: 0.1875em 0.625em;
+  margin-right: 0.5em;
   cursor: pointer;
   overflow: hidden; 
   white-space: nowrap;
@@ -280,9 +280,9 @@
   text-align: center;
   color: rgba(210, 210, 210, 1);
   border: none;
-  border-radius: 1rem;
-  padding: 0.1875rem 0.625rem;
-  margin-right: 0.5rem;
+  border-radius: 1em;
+  padding: 0.1875em 0.625em;
+  margin-right: 0.5em;
   overflow: hidden;
   white-space: nowrap;
 }
