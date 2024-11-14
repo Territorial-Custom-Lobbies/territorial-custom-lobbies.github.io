@@ -4,7 +4,7 @@ const settingsLabel = {
     0: 'White Arena',
     1: 'Black Arena',
     2: 'Island',
-    3: 'Mountains 1',
+    /* 3: 'Mountains 1', */
     4: 'Desert',
     5: 'Swamp',
     6: 'Snow',
@@ -22,7 +22,10 @@ const settingsLabel = {
     18: 'Asia',
     19: 'Australia',
     20: 'Island Kingdom',
-    21: 'Mountains 2',
+    /* 21: 'Mountains 2', */
+    22: 'Random',
+    23: 'Random (Competitive)',
+    24: 'Random (Comp + Small)',
   },
   gameMode: {
     label: 'Game Mode',
@@ -34,8 +37,8 @@ const settingsLabel = {
     5: '7 Teams',
     6: '8 Teams',
     7: 'Battle Royale',
-    9: 'No Fullsend',
-    10: 'Zombies'
+    9: 'Zombies',
+    10: 'No Fullsend'
   },
   difficulty: {
     label: 'Difficulty',
@@ -46,6 +49,31 @@ const settingsLabel = {
     4: 'Very Hard',
     5: 'Impossible',
   },
+}
+
+const randomMap = [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+const randomMapCompetitive = [1, 4, 5, 6, 8, 10, 12, 13, 14, 16];
+const randomMapCompSmall = [1, 4, 5, 6, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+
+const probabilitiesCompetitive = [0.4, 0.1, 0.05, 0.075, 0.1, 0.05, 0.75, 0.05, 0.05, 0.05];
+const probabilitiesCompSmall = [0.3, 0.075, 0.04, 0.06, 0.075, 0.04, 0.04, 0.06, 0.05, 0.05, 0.04, 0.05, 0.04, 0.04, 0.04];
+
+function getRandomElementWithProbabilities(elements, probabilities) {
+  const cumulativeProbabilities = [];
+  let sum = 0;
+
+  for (let i = 0; i < probabilities.length; i++) {
+    sum += probabilities[i];
+    cumulativeProbabilities[i] = sum;
+  }
+
+  const random = Math.random() * sum;
+
+  for (let i = 0; i < cumulativeProbabilities.length; i++) {
+    if (random < cumulativeProbabilities[i]) {
+      return elements[i];
+    }
+  }
 }
 
 function createPreCustomLobbyUI() {
@@ -322,7 +350,21 @@ function createSettingsUI() {
   
     dropdown.addEventListener('change', (event) => {
       if (host) {
-        lobby.settings[key] = parseInt(event.target.value);
+        let value = parseInt(event.target.value);
+        lobby.settings[key] = value;
+
+        if (key === 'mapID') {
+          if (value === 22) {
+            lobby.settings['randomMapID'] = randomMap[getRandomInt(0, randomMap.length)];
+          } else if (value === 23) {
+            lobby.settings['randomMapID'] = getRandomElementWithProbabilities(randomMapCompetitive, probabilitiesCompetitive);
+          }
+          else if (value === 24) {
+            lobby.settings['randomMapID'] = getRandomElementWithProbabilities(randomMapCompSmall, probabilitiesCompSmall);
+          } else {
+            lobby.settings['randomMapID'] = null;
+          }
+        }
         updateSettings(lobby.settings);
       }
     });

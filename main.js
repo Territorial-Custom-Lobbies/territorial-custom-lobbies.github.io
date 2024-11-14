@@ -321,7 +321,7 @@ function d0() {
   this.dW = 1068;
   this.dH = function() {
     dS = 2;
-    dU = 33 % 512;
+    dU = 34 % 512; // 33 % 512
     dT = "15 Sep 2024 [1.99.7.8]";
     x = window.location.hostname.toLowerCase().indexOf("territorial.io") >= 0;
     y = dX();
@@ -20889,8 +20889,13 @@ function DataDecoder() {
         a9H: var_player_status
       });
     }
-    if (lobby != null) { 
-      let mapID = lobby.settings.mapID;
+    if (lobby != null) {
+      let mapID;
+      if (lobby.settings.randomMapID === null) {
+        mapID = lobby.settings.mapID;
+      } else {
+        mapID = lobby.settings.randomMapID;
+      }
       let gameMode = lobby.settings.gameMode;
       var_mapID = mapID;
       var_gamemode = gameMode;
