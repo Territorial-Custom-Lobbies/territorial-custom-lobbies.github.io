@@ -353,17 +353,8 @@ function createSettingsUI() {
         let value = parseInt(event.target.value);
         lobby.settings[key] = value;
 
-        if (key === 'mapID') {
-          if (value === 22) {
-            lobby.settings['randomMapID'] = randomMap[Math.floor(Math.random() * randomMap.length)];
-          } else if (value === 23) {
-            lobby.settings['randomMapID'] = getRandomElementWithProbabilities(randomMapCompetitive, probabilitiesCompetitive);
-          }
-          else if (value === 24) {
-            lobby.settings['randomMapID'] = getRandomElementWithProbabilities(randomMapCompSmall, probabilitiesCompSmall);
-          } else {
-            lobby.settings['randomMapID'] = null;
-          }
+        if (key === 'mapID' && value < 22) {
+          lobby.settings.randomMapID = null;
         }
         updateSettings(lobby.settings);
       }
@@ -432,6 +423,7 @@ function createBottomButtons(background) {
   startGameButton.addEventListener('click', () => {
     if (host) {
       startGameButton.disabled = true;
+      checkRandomMap();
       joinTerriLobby();
     }
   });
@@ -516,4 +508,14 @@ function backToMainMenu() {
   }
   leaveLobby();
   a1.wh();
+}
+
+function checkRandomMap() {
+  if (lobby.settings.mapID === 22) {
+    lobby.settings.randomMapID = randomMap[Math.floor(Math.random() * randomMap.length)];
+  } else if (lobby.settings.mapID === 23) {
+    lobby.settings.randomMapID = getRandomElementWithProbabilities(randomMapCompetitive, probabilitiesCompetitive);
+  } else if (lobby.settings.mapID === 24) {
+    lobby.settings.randomMapID = getRandomElementWithProbabilities(randomMapCompSmall, probabilitiesCompSmall);
+  }
 }
