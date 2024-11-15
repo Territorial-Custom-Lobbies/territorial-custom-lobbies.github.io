@@ -172,6 +172,7 @@ function createUsernameInput(background) {
 
   usernameInput.addEventListener('input', (event) => {
     usernameInput.value = event.target.value.slice(0, 20);
+    bY.dZ.data[122].value = usernameInput.value;
   });
 
   usernameInput.addEventListener('keydown', (event) => {
