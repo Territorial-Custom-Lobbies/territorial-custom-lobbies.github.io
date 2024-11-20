@@ -7424,11 +7424,56 @@ function bj() {
     this.jl = (this.jl === 10 && this.jn) ? 7 : this.jl;
     this.jl = (this.jl === 8 && this.jN !== 2) ? 7 : this.jl;
     this.zU = this.jl === 9 ? 2 : (this.jl + 2);
-    this.zV = this.jN <= 2 ? 30 : this.jN <= 50 ? 40 : 50;
+    // this.zV = this.jN <= 2 ? 30 : this.jN <= 50 ? 40 : 50;
+    this.zV = this.jN <= 2 ? 30 : 40;
+    switch (lobby.settings.spawnTime) {
+      case 0:
+        this.zV *= 0.1;
+        break;
+      case 1:
+        this.zV *= 0.25;
+        break;
+      case 2:
+        this.zV *= 0.5;
+        break;
+      case 3:
+        this.zV *= 0.75;
+        break;
+      case 4:
+        this.zV *= 1;
+        break;
+      case 5:
+        this.zV *= 1.25;
+        break;
+      case 6:
+        this.zV *= 1.5;
+        break;
+      case 7:
+        this.zV *= 1.75;
+        break;
+      case 8:
+        this.zV *= 2;
+        break;
+      case 9:
+        this.zV *= 2.5;
+        break;
+      case 10:
+        this.zV *= 3;
+        break;
+      case 11:
+        this.zV *= 4;
+        break;
+      case 12:
+        this.zV *= 5;
+        break;
+    }
+    this.zV = Math.ceil(this.zV);
+    
     if (ay.jh && !ay.ji.zc) {
       this.zT = this.gd = false;
     } else {
-      this.zT = this.gd = (this.iN || this.jN < 100);
+      // this.zT = this.gd = (this.iN || this.jN < 100);
+      this.zT = this.gd = !lobby.settings.randomSpawn;
     }
     this.oH = this.gd ? new zK() : null;
     if (dS === 1 && false) {
@@ -19883,7 +19928,7 @@ function aFT() {
   }
   ;
   this.aHm = function() {
-    i.rX(); // To remove the UI
+    // i.rX(); // To remove the UI
     // aM.a7U(bY.dZ.data[10].value); // lobby id
     createPreCustomLobbyUI();
     // aM.dH(); // Enter the lobby
@@ -26072,6 +26117,10 @@ function u() {
 }
 setTimeout(bb, 10000);
 window.onload = function() {
+  const lobbyCodeFromUrl = getUrlParameter('code');
   bb();
-}
-;
+  if (lobbyCodeFromUrl) {
+  const playerName = bY.dZ.data[122].value.slice(0, 20);
+    connectToServer(lobbyCodeFromUrl, playerName);
+  }
+};

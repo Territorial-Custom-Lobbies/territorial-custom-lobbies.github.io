@@ -49,6 +49,22 @@ const settingsLabel = {
     4: 'Very Hard',
     5: 'Impossible',
   },
+  spawnTime: {
+    label: 'Spawn Time',
+    0: "1.17s/1.56s (0.1x)",
+    1: "2.96s/3.92s (0.25x)",
+    2: "5.88s/7.84s (0.5x)",
+    3: "8.82s/11.76s (0.75x)",
+    4: "11.76s/15.68s (1x Default)",
+    5: "14.7s/19.6s (1.25x)",
+    6: "17.64s/23.52s (1.5x)",
+    7: "20.58s/27.44s (1.75x)",
+    8: "23.52s/31.36s (2x)",
+    9: "29.4s/39.2s (2.5x)",
+    10: "35.28s/47.04s (3x)",
+    11: "47.04s/62.72s (4x)",
+    12: "58.8s/78.4s (5x)",
+  },
 }
 
 const randomMap = [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
@@ -76,7 +92,25 @@ function getRandomElementWithProbabilities(elements, probabilities) {
   }
 }
 
-function createPreCustomLobbyUI() {
+function getUrlParameter(key) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(key);
+}
+
+function updateUrlParameter(key, value) {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (value === null) {
+    urlParams.delete(key);
+  } else {
+    urlParams.set(key, value);
+  }
+  const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+  window.history.pushState({}, '', newUrl.endsWith('?') ? newUrl.slice(0, -1) : newUrl);
+}
+
+function hideCanvasCreateBackground () {
+  i.rX();
+
   const canvasA = document.getElementById('canvasA');
   if (canvasA) {
     canvasA.classList.add('hidden');
@@ -87,6 +121,12 @@ function createPreCustomLobbyUI() {
 
   document.body.appendChild(background);
 
+  return background;
+}
+
+function createPreCustomLobbyUI() {
+  const background = hideCanvasCreateBackground();
+
   const lobbyCodeInput = document.createElement('input');
   lobbyCodeInput.className = 'input-lobby-code';
   lobbyCodeInput.type = 'text';
@@ -96,22 +136,38 @@ function createPreCustomLobbyUI() {
     lobbyCodeInput.value = event.target.value.toUpperCase();
   });
 
+  let isCooldownActive = false;
+  const cooldownTime = 2000;
+
+  lobbyCodeInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !isCooldownActive) {
+      const lobbyCode = lobbyCodeInput.value;
+      const playerName = bY.dZ.data[122].value.slice(0, 20);
+      connectToServer(lobbyCode, playerName);
+
+      isCooldownActive = true;
+      setTimeout(() => {
+        isCooldownActive = false;
+      }, cooldownTime);
+    }
+  });
+
   background.appendChild(lobbyCodeInput);
 
-  const createLobbyButton = document.createElement('button');
-  createLobbyButton.className = 'enter-lobby-button create-lobby';
-  createLobbyButton.textContent = 'Create Lobby';
+  // const createLobbyButton = document.createElement('button');
+  // createLobbyButton.className = 'enter-lobby-button create-lobby';
+  // createLobbyButton.textContent = 'Create Lobby';
 
-  createLobbyButton.addEventListener('click', () => {
-    const lobbyCode = lobbyCodeInput.value;
-    const playerName = bY.dZ.data[122].value.slice(0, 20);
-    connectToServer(lobbyCode, playerName, true);
+  // createLobbyButton.addEventListener('click', () => {
+  //   const lobbyCode = lobbyCodeInput.value;
+  //   const playerName = bY.dZ.data[122].value.slice(0, 20);
+  //   connectToServer(lobbyCode, playerName);
 
-    createLobbyButton.disabled = true;
-    setTimeout(() => {
-      createLobbyButton.disabled = false;
-    }, 3000);
-  });
+  //   createLobbyButton.disabled = true;
+  //   setTimeout(() => {
+  //     createLobbyButton.disabled = false;
+  //   }, 2000);
+  // });
 
   const joinLobbyButton = document.createElement('button');
   joinLobbyButton.className = 'enter-lobby-button join-lobby';
@@ -125,10 +181,10 @@ function createPreCustomLobbyUI() {
     joinLobbyButton.disabled = true;
     setTimeout(() => {
       joinLobbyButton.disabled = false;
-    }, 3000);
+    }, 2000);
   });
 
-  background.appendChild(createLobbyButton);
+  // background.appendChild(createLobbyButton);
   background.appendChild(joinLobbyButton);
 
   const leaveLobbyButton = document.createElement('button');
@@ -138,8 +194,9 @@ function createPreCustomLobbyUI() {
   leaveLobbyButton.style.width = '128px';
   leaveLobbyButton.style.height = '32px';
   // leaveLobbyButton.style.top = 'calc(40% + 7rem)';
-  leaveLobbyButton.style.top = 'calc(40% + 112px)';
-  leaveLobbyButton.style.left = '50%';
+  // leaveLobbyButton.style.top = 'calc(40% + 112px)';
+  leaveLobbyButton.style.top = 'calc(40% + 48px)';
+  leaveLobbyButton.style.left = 'calc(50% - 72px)';
   leaveLobbyButton.style.borderRadius = '16px';
 
   leaveLobbyButton.addEventListener('click', () => {
@@ -150,7 +207,12 @@ function createPreCustomLobbyUI() {
 }
 
 function createCustomLobbyUI() {
-  const background = document.querySelector('.custom-lobby-background');
+  updateUrlParameter('code', lobby.code);
+
+  var background = document.querySelector('.custom-lobby-background');
+  if (!background) {
+    background = hideCanvasCreateBackground();
+  }
   // remove all children
   while (background.firstChild) {
     background.removeChild(background.firstChild);
@@ -161,7 +223,6 @@ function createCustomLobbyUI() {
   createPasswordInput(background);
   createSettingsUI();
   createBottomButtons(background);
-
 }
 
 function createUsernameInput(background) {
@@ -172,11 +233,11 @@ function createUsernameInput(background) {
 
   usernameInput.addEventListener('input', (event) => {
     usernameInput.value = event.target.value.slice(0, 20);
-    bY.dZ.data[122].value = usernameInput.value;
   });
 
   usernameInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
+      bY.dZ.data[122].value = usernameInput.value;
       changePlayerName(usernameInput.value);
     }
   });
@@ -363,32 +424,66 @@ function createSettingsUI() {
     if (!host) {
       dropdown.disabled = true;
     }
-
+    
     settings.appendChild(settingsRow);
     settingsRow.appendChild(label);
     settingsRow.appendChild(dropdown);
+    
+    if (key === 'spawnTime') {
+      const infoIcon = document.createElement('i');
+      infoIcon.className = 'fas fa-info-circle info-icon';
+      const tooltip = document.createElement('div');
+      tooltip.className = 'tooltip';
+      tooltip.textContent = 'Set spawn selection time: first for ≤2 players, second for >2 players';
+      
+      infoIcon.addEventListener('mouseenter', () => {
+        tooltip.style.visibility = 'visible';
+        tooltip.style.opacity = '1';
+      });
+      
+      infoIcon.addEventListener('mouseleave', () => {
+        tooltip.style.visibility = 'hidden';
+        tooltip.style.opacity = '0';
+      });
+      
+      settingsRow.appendChild(infoIcon);
+      settingsRow.appendChild(tooltip);
+    }
   });
 
+  createRowWithSwitcher('Random Spawn', settings);
+  createRowWithSwitcher('Close Lobby', settings);
+}
+
+function createRowWithSwitcher(labelText, settings) {
   const settingsRow = document.createElement('div');
   settingsRow.className = 'settings-row';
   
   const label = document.createElement('label');
   label.className = 'settings-label';
-  label.textContent = 'Close Lobby';
+  label.textContent = labelText;
 
   const switchContainer = document.createElement('label');
   switchContainer.className = 'switch-container';
 
   const switchCheckbox = document.createElement('input');
   switchCheckbox.type = 'checkbox';
-  switchCheckbox.id = 'dropdown-closeLobby';
+  if (labelText === 'Close Lobby') {
+    switchCheckbox.id = 'dropdown-closeLobby';
+  } else if (labelText === 'Random Spawn') {
+    switchCheckbox.id = 'dropdown-randomSpawn';
+  }
 
   const switchSlider = document.createElement('span');
   switchSlider.className = 'slider round';
 
   switchCheckbox.addEventListener('change', (event) => {
     if (host) {
-      lobby.settings.open = !event.target.checked;
+      if (labelText === 'Close Lobby') {
+        lobby.settings.open = !event.target.checked;
+      } else if (labelText === 'Random Spawn') {
+        lobby.settings.randomSpawn = event.target.checked;
+      }
       updateSettings(lobby.settings);
     }
   });
@@ -435,6 +530,13 @@ function createBottomButtons(background) {
   background.appendChild(startGameButton);
 }
 
+function updateUsernameInput() {
+  const usernameInput = document.querySelector('.input-username');
+  if (usernameInput) {
+    usernameInput.disabled = !usernameInput.disabled;
+  }
+}
+
 function updateSettingsUI(newHost = false) {
   Object.keys(settingsLabel).forEach((key) => {
     const dropdown = document.getElementById(`dropdown-${key}`);
@@ -450,6 +552,13 @@ function updateSettingsUI(newHost = false) {
     closeLobbyOption.checked = !lobby.settings.open;
     if (newHost) {
       closeLobbyOption.disabled = false;
+    }
+  }
+  const randomSpawnOption = document.getElementById('dropdown-randomSpawn');
+  if (randomSpawnOption) {
+    randomSpawnOption.checked = lobby.settings.randomSpawn;
+    if (newHost) {
+      randomSpawnOption.disabled = false;
     }
   }
 }
@@ -486,6 +595,7 @@ function lobbyUIShow() {
     canvasA.classList.add('hidden');
   }
 
+  updateUsernameInput();
   updateBottomButtons();
 }
 
@@ -508,6 +618,7 @@ function backToMainMenu() {
     background.remove();
   }
   leaveLobby();
+  updateUrlParameter('code', null);
   a1.wh();
 }
 
@@ -520,4 +631,14 @@ function checkRandomMap() {
     lobby.settings.randomMapID = getRandomElementWithProbabilities(randomMapCompSmall, probabilitiesCompSmall);
   }
   updateSettings(lobby.settings);
+}
+
+function displayLobbyClosedMessage(message) {
+  const background = document.querySelector('.custom-lobby-background');
+  if (background) {
+    const lobbyClosedMessage = document.createElement('div');
+    lobbyClosedMessage.className = 'lobby-closed-message';
+    lobbyClosedMessage.textContent = message;
+    background.appendChild(lobbyClosedMessage);
+  }
 }

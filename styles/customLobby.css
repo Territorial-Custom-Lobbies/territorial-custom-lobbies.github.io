@@ -92,6 +92,17 @@
   background-color: rgba(100, 10, 10, 1);
 }
 
+.lobby-closed-message {
+  position: absolute;
+  user-select: none;
+  font: inherit;
+  color: rgba(240, 240, 240, 1);
+  top: calc(40% + 96px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  user-select: none;
+}
+
 .start-game-button {
   position: absolute;
   user-select: none;
@@ -131,6 +142,10 @@
   background-color: rgb(240, 240, 240);
   padding: 0.5rem 1rem;
   border-radius: 1rem;
+}
+
+.input-username:disabled {
+  opacity: 0.7;
 }
 
 .players-container {
@@ -310,6 +325,7 @@
 
 .settings-row {
   display: flex;
+  position: relative;
   background-color: rgba(60, 60, 60, 1);
   height: 2rem;
   margin-bottom: 0.75rem;
@@ -357,6 +373,28 @@
   text-align: left;
   padding-left: 0.75rem;
   width: 10rem;
+}
+
+.info-icon {
+  position: absolute;
+  left: 6.5rem;
+  cursor: pointer;
+}
+.tooltip {
+  visibility: hidden;
+  position: absolute;
+  text-align: center;
+  background-color: rgb(5, 5, 28);
+  color: rgba(240, 240, 240, 1);
+  width: 13rem;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  z-index: 1;
+  top: 115%;
+  left: 7rem;
+  margin-left: -6.5rem;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .settings-dropdown {

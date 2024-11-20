@@ -11,7 +11,7 @@ var game = {
   joined: false,
 }
 
-function connectToServer(code, name, create = false) {
+function connectToServer(code, name) {
   socket = io("https://territorial-custom-lobbies-backend.onrender.com");
 
   isConnected = false;
@@ -28,11 +28,7 @@ function connectToServer(code, name, create = false) {
 
   socket.on('connect', () => {
     isConnected = true;
-    if (create) {
-      socket.emit('createLobby', code, name);
-    } else {
-      socket.emit('joinLobby', code, name);
-    }
+    socket.emit('joinLobby', code, name);
   });
 
   socket.on('lobbyJoined', (lobbyData, playerIdData) => {
@@ -62,18 +58,22 @@ function connectToServer(code, name, create = false) {
     }
     game.id = gameId;
   });
-
-  socket.on('kicked', (resp) => {
-    console.log(resp);
-    backToMainMenu();
-  });
-
+  
   socket.on('newHostToken', (lobbyData) => {
     lobby = lobbyData;
     hostToken = lobbyData.hostToken;
     host = true;
     updateSettingsUI(newHost = true);
     updateBottomButtons();
+  });
+
+  socket.on('lobbyClosed', (resp) => {
+    displayLobbyClosedMessage(resp.message);
+  });
+
+  socket.on('kicked', (resp) => {
+    console.log(resp.message);
+    backToMainMenu();
   });
 
   socket.on('disconnect', () => {
@@ -119,6 +119,7 @@ function joinTerriLobby() {
   const proxy = lobby.players.length === 1 ? 0 : 2;
   aM.a7U(proxy); // set lobby id to 2
   aM.dH() // Enter the lobby
+  updateUsernameInput();
 }
 
 function chooseGame(lobbyGames) {
@@ -177,6 +178,12 @@ function leaveLobby() {
     joined: false,
   };
 }
+
+window.addEventListener('beforeunload', () => {
+  if (socket) {
+    socket.disconnect();
+  }
+});
 
 function sendChatMessage(message) {
   const code = lobby.code;
