@@ -503,7 +503,7 @@ function createBottomButtons(background) {
   leaveLobbyButton.className = 'leave-lobby-button';
   leaveLobbyButton.textContent = 'Back';
   leaveLobbyButton.style.top = 'calc(100% - 4rem)';
-  leaveLobbyButton.style.left = 'calc(50% + 5rem';
+  leaveLobbyButton.style.left = 'calc(50% - 9rem';
 
   leaveLobbyButton.addEventListener('click', () => {
     backToMainMenu();
@@ -528,6 +528,25 @@ function createBottomButtons(background) {
   }
 
   background.appendChild(startGameButton);
+
+  const copyLinkButton = document.createElement('button');
+  copyLinkButton.className = 'copy-link-button';
+  copyLinkButton.textContent = 'Copy Link';
+
+  copyLinkButton.addEventListener('click', () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      const originalText = copyLinkButton.textContent;
+      copyLinkButton.innerHTML = 'Link Copied <i class="fas fa-check"></i>';
+      setTimeout(() => {
+        copyLinkButton.textContent = originalText;
+      }, 750);
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  });
+
+  background.appendChild(copyLinkButton);
 }
 
 function updateUsernameInput() {
@@ -567,6 +586,9 @@ function updateBottomButtons() {
   const startGameButton = document.querySelector('.start-game-button');
   if (startGameButton) {
     var textContent = game.joined ? `${game.timeLeft}s` : 'Start Game';
+    if (game.joined && game.timeLeft === 1) {
+      playGameStartingSound();
+    }
     startGameButton.textContent = textContent;
     startGameButton.disabled = !host || game.id != null;
   }
@@ -641,4 +663,9 @@ function displayLobbyClosedMessage(message) {
     lobbyClosedMessage.textContent = message;
     background.appendChild(lobbyClosedMessage);
   }
+}
+
+function playGameStartingSound() {
+  const audio = new Audio('./sounds/bell-bong-sfx.mp3');
+  audio.play();
 }
