@@ -318,10 +318,11 @@ var x;
 var dV;
 var y;
 function d0() {
-  this.dW = 1068;
+  this.dW = 1070; // 1068
   this.dH = function() {
     dS = 2;
-    dU = 34 % 512; // 33 % 512
+    // this seems to have no effect anymore
+    dU = 1 % 4096; // 34 % 512; // 33 % 512
     dT = "15 Sep 2024 [1.99.7.8]";
     x = window.location.hostname.toLowerCase().indexOf("territorial.io") >= 0;
     y = dX();
