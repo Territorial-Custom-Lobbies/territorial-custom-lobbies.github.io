@@ -10942,8 +10942,9 @@ function c2() {
     tU.fillRect(0, 0, t, this.ir);
     tU.fillStyle = p.mN;
     this.a4R();
-    // this.a4S(); // Why was this ever added
+    this.a4S(); // Why was this ever added
     // Removed horizontal white bar
+    // Readded horizontal white bar
     tU.fillStyle = aV.gK[a1.e2] >= aT.j3(a1.e2) ? p.mm : p.mL;
     tU.fillText(b2.w0.z6(yh), Math.floor(t / 2), a4O);
     tU.fillStyle = p.mL;
@@ -10951,11 +10952,19 @@ function c2() {
     tU.fillRect(0, 0, 1, this.ir);
     tU.fillRect(0, this.ir - 1, t, 1);
     tU.fillRect(t - 1, 0, 1, this.ir);
-  }
-  ;
-  this.a4R = function() {
-    var ss = Math.floor((aT.a4T() - 1) * this.ir / 9);
-    ss = a4U(ss, this.ir - a4J);
+  };
+  // this.a4R = function() {
+  //   var ss = Math.floor((aT.a4T() - 1) * this.ir / 9);
+  //   ss = a4U(ss, this.ir - a4J);
+  //   tU.fillRect(0, ss, a4J, this.ir - ss);
+  //   tU.fillRect(t - a4J, ss, a4J, this.ir - ss);
+  // }
+
+  this.a4R = function() { //jump
+    var ep = bU.jK() % 100;
+    ep -= ep % 10;
+    ep = 9 - bB.ek(ep, 10);
+    var ss = Math.floor(ep * (this.ir - a4J) / 9);
     tU.fillRect(0, ss, a4J, this.ir - ss);
     tU.fillRect(t - a4J, ss, a4J, this.ir - ss);
   }
