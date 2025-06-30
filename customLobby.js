@@ -146,7 +146,7 @@ function joinTerriLobby() {
 function chooseGame() {
   const code = lobby.code;
   var gameId = 0;
-  if (game.timeLeft > 3) {
+  if (game.timeLeft > 5) {
     socket.emit("startGame", code, hostToken, gameId);
   } else {
     const timeOut = (game.timeLeft + 1) * 1000;
