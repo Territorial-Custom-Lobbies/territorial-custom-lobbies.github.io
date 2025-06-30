@@ -8717,7 +8717,7 @@ function by() {
   this.gameInit = function () {
     bQ.dX();
     this.z7 = this.jw = this.data.humanCount;
-    this.kF = this.z7 === 1;
+    this.kF = this.z7 === 1 && !lobby
     this.mG = false;
     this.gq = this.data.isReplay;
     this.kD =
