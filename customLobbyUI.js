@@ -4,7 +4,7 @@ const settingsLabel = {
     0: 'White Arena',
     1: 'Black Arena',
     2: 'Island',
-    /* 3: 'Mountains 1', */
+    3: 'Mountains 1',
     4: 'Desert',
     5: 'Swamp',
     6: 'Snow',
@@ -22,7 +22,7 @@ const settingsLabel = {
     18: 'Asia',
     19: 'Australia',
     20: 'Island Kingdom',
-    /* 21: 'Mountains 2', */
+    21: 'Mountains 2',
     22: 'Random',
     23: 'Random (Competitive)',
     24: 'Random (Comp + Small)',
@@ -109,17 +109,18 @@ function updateUrlParameter(key, value) {
 }
 
 function hideCanvasCreateBackground () {
-  i.rX();
-
   const canvasA = document.getElementById('canvasA');
   if (canvasA) {
     canvasA.classList.add('hidden');
   }
 
-  const background = document.createElement('div');
-  background.className = 'custom-lobby-background';
+  var background = document.querySelector('.custom-lobby-background');
+  if (!background) {
+      background = document.createElement('div');
+      background.className = 'custom-lobby-background';
 
-  document.body.appendChild(background);
+      document.body.appendChild(background);
+  }
 
   return background;
 }
@@ -142,7 +143,8 @@ function createPreCustomLobbyUI() {
   lobbyCodeInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !isCooldownActive) {
       const lobbyCode = lobbyCodeInput.value;
-      const playerName = bY.dZ.data[122].value.slice(0, 20);
+      // const playerName = bY.dZ.data[122].value.slice(0, 20);
+      const playerName = bi.eE.data[122].value.slice(0, 20);
       connectToServer(lobbyCode, playerName);
 
       isCooldownActive = true;
@@ -175,7 +177,8 @@ function createPreCustomLobbyUI() {
 
   joinLobbyButton.addEventListener('click', () => {
     const lobbyCode = lobbyCodeInput.value;
-    const playerName = bY.dZ.data[122].value.slice(0, 20);
+    // const playerName = bY.dZ.data[122].value.slice(0, 20);
+    const playerName = bi.eE.data[122].value.slice(0, 20);
     connectToServer(lobbyCode, playerName);
 
     joinLobbyButton.disabled = true;
@@ -237,7 +240,8 @@ function createUsernameInput(background) {
 
   usernameInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
-      bY.dZ.data[122].value = usernameInput.value;
+      // bY.dZ.data[122].value = usernameInput.value;
+      bi.eE.data[122].value = usernameInput.value;
       changePlayerName(usernameInput.value);
     }
   });
@@ -624,7 +628,8 @@ function lobbyUIShow() {
 function checkRejoinCustomLobby() {
   if (lobby) {
     backToLobby();
-    i.rX();
+    // i.rX();
+    t.x();
     lobbyUIShow();
   }
 }
@@ -641,7 +646,11 @@ function backToMainMenu() {
   }
   leaveLobby();
   updateUrlParameter('code', null);
-  a1.wh();
+  t.x();
+  bm.tK();
+  t.u(5, 5);
+  // a1.wh();
+  // aD.a0P(); No longer needed
 }
 
 function checkRandomMap() {
@@ -667,5 +676,16 @@ function displayLobbyClosedMessage(message) {
 
 function playGameStartingSound() {
   const audio = new Audio('./sounds/bell-bong-sfx.mp3');
+  audio.volume = 0.1;
   audio.play();
+}
+
+function updateTimeLeft(prctToNextGame) {
+  console.log("Updating time left");
+  const percentage = prctToNextGame / 1000; // Convert to percentage
+  const interval = 21000; // 21 seconds
+  const timeLeft = Math.ceil((1 - percentage) * interval / 1000);
+  game.timeLeft = timeLeft;
+
+  updateBottomButtons();
 }
