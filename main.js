@@ -2913,7 +2913,7 @@ function o4() {
     while (bG.e2 + 8 <= mV) {
       id = bG.oj(4);
       fO = bG.oj(9); // id of the player that did the action
-      
+
       var continueLoop = true;
       var a, b;
       for (var i = 0; i < players.length; i++) {
@@ -8744,46 +8744,48 @@ function by() {
     }
     // this.a3W = this.jw <= 2 ? 30 : this.jw <= 50 ? 40 : 50;
     this.a3W = this.jw <= 2 ? 30 : 40;
-    switch (lobby.settings.spawnTime) {
-      case 0:
-        this.a3W *= 0.1;
-        break;
-      case 1:
-        this.a3W *= 0.25;
-        break;
-      case 2:
-        this.a3W *= 0.5;
-        break;
-      case 3:
-        this.a3W *= 0.75;
-        break;
-      case 4:
-        this.a3W *= 1;
-        break;
-      case 5:
-        this.a3W *= 1.25;
-        break;
-      case 6:
-        this.a3W *= 1.5;
-        break;
-      case 7:
-        this.a3W *= 1.75;
-        break;
-      case 8:
-        this.a3W *= 2;
-        break;
-      case 9:
-        this.a3W *= 2.5;
-        break;
-      case 10:
-        this.a3W *= 3;
-        break;
-      case 11:
-        this.a3W *= 4;
-        break;
-      case 12:
-        this.a3W *= 5;
-        break;
+    if (lobby) {
+      switch (lobby.settings.spawnTime) {
+        case 0:
+          this.a3W *= 0.1;
+          break;
+        case 1:
+          this.a3W *= 0.25;
+          break;
+        case 2:
+          this.a3W *= 0.5;
+          break;
+        case 3:
+          this.a3W *= 0.75;
+          break;
+        case 4:
+          this.a3W *= 1;
+          break;
+        case 5:
+          this.a3W *= 1.25;
+          break;
+        case 6:
+          this.a3W *= 1.5;
+          break;
+        case 7:
+          this.a3W *= 1.75;
+          break;
+        case 8:
+          this.a3W *= 2;
+          break;
+        case 9:
+          this.a3W *= 2.5;
+          break;
+        case 10:
+          this.a3W *= 3;
+          break;
+        case 11:
+          this.a3W *= 4;
+          break;
+        case 12:
+          this.a3W *= 5;
+          break;
+      }
     }
     this.zV = Math.ceil(this.zV);
 
@@ -31215,5 +31217,14 @@ function cx() {
 }
 setTimeout(bq, 10000);
 window.onload = function () {
+  const lobbyCodeFromUrl = getUrlParameter("code");
   bq();
+  if (lobbyCodeFromUrl) {
+    let playerName = bi.eE.data[122].value.slice(0, 20);
+    while (playerName.length < 3) {
+      playerName += "1";
+    }
+    bi.eE.data[122].value = playerName;
+    connectToServer(lobbyCodeFromUrl, playerName);
+  }
 };

@@ -144,7 +144,11 @@ function createPreCustomLobbyUI() {
     if (event.key === 'Enter' && !isCooldownActive) {
       const lobbyCode = lobbyCodeInput.value;
       // const playerName = bY.dZ.data[122].value.slice(0, 20);
-      const playerName = bi.eE.data[122].value.slice(0, 20);
+      let playerName = bi.eE.data[122].value.slice(0, 20);
+      while (playerName.length < 3) {
+        playerName += '1';
+      }
+      bi.eE.data[122].value = playerName;
       connectToServer(lobbyCode, playerName);
 
       isCooldownActive = true;
@@ -178,7 +182,11 @@ function createPreCustomLobbyUI() {
   joinLobbyButton.addEventListener('click', () => {
     const lobbyCode = lobbyCodeInput.value;
     // const playerName = bY.dZ.data[122].value.slice(0, 20);
-    const playerName = bi.eE.data[122].value.slice(0, 20);
+    let playerName = bi.eE.data[122].value.slice(0, 20);
+    while (playerName.length < 3) {
+      playerName += '1';
+    }
+    bi.eE.data[122].value = playerName;
     connectToServer(lobbyCode, playerName);
 
     joinLobbyButton.disabled = true;
@@ -240,9 +248,14 @@ function createUsernameInput(background) {
 
   usernameInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
-      // bY.dZ.data[122].value = usernameInput.value;
-      bi.eE.data[122].value = usernameInput.value;
-      changePlayerName(usernameInput.value);
+      let username = usernameInput.value;
+      while (username.length < 3) {
+      username += '1';
+      }
+      usernameInput.value = username;
+      // bY.dZ.data[122].value = username;
+      bi.eE.data[122].value = username;
+      changePlayerName(username);
     }
   });
 
@@ -681,7 +694,6 @@ function playGameStartingSound() {
 }
 
 function updateTimeLeft(prctToNextGame) {
-  console.log("Updating time left");
   const percentage = prctToNextGame / 1000; // Convert to percentage
   const interval = 21000; // 21 seconds
   const timeLeft = Math.ceil((1 - percentage) * interval / 1000);
