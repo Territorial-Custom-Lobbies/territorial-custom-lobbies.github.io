@@ -695,7 +695,7 @@ function playGameStartingSound() {
 
 function updateTimeLeft(prctToNextGame) {
   const percentage = prctToNextGame / 1000; // Convert to percentage
-  const interval = 21000; // 21 seconds
+  const interval = 20000; // 20 seconds
   const timeLeft = Math.ceil((1 - percentage) * interval / 1000);
   game.timeLeft = timeLeft;
 
